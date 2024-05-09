@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'bottombar/google_nav_bar.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
       //     tabletScaffold: TabletScaffold(),
       //     desktopScaffold: DesktopScaffold()),
 
-      // home:  const GoogleNavBar(),
+      home: const GoogleNavBar(),
     );
   }
 }

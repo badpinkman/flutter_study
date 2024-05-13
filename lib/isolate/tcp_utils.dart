@@ -10,11 +10,11 @@ class TcpUtils {
     Socket? socket;
     try {
       socket = await Socket.connect(ip, port, timeout: timeout);
-      print('Connected to $ip:$port');
+      // print('已经连接到 $ip:$port');
 
       socket.write(message);
       await socket.flush();
-      print('Sent: $message');
+      // print('发送消息: $message');
 
       final buffer = StringBuffer();
       socket.listen(
@@ -22,11 +22,11 @@ class TcpUtils {
           buffer.write(String.fromCharCodes(data));
         },
         onDone: () {
-          print('Server closed connection');
+          // print('完毕, 关闭连接');
           socket?.destroy();
         },
         onError: (error) {
-          print('Error: $error');
+          // print('TCP 错误: $error');
           socket?.destroy();
         },
         cancelOnError: true,
@@ -34,13 +34,14 @@ class TcpUtils {
 
       // Wait for the response or timeout
       await socket.done.timeout(timeout, onTimeout: () {
-        print('Timeout occurred');
+        // print('TCP 超时... ');
+        buffer.write('TCP超时$ip:$port');
         socket?.destroy();
       });
 
       return buffer.toString();
     } catch (e) {
-      print('Error: $e');
+      // print('TCP 错误: $e');
       socket?.destroy();
       return null;
     } finally {

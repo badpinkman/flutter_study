@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class GoogleNavBar extends StatefulWidget {
@@ -9,9 +10,50 @@ class GoogleNavBar extends StatefulWidget {
 }
 
 class _GoogleNavBarState extends State<GoogleNavBar> {
+  String text = '终止';
+
+  get _buttons => Center(
+        child: Column(
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  FlutterBackgroundService().invoke('setAsForeground');
+                },
+                child: const Text('前台')),
+            ElevatedButton(
+                onPressed: () {
+                  FlutterBackgroundService().invoke('setAsBackground');
+                },
+                child: const Text('后台')),
+            ElevatedButton(
+                onPressed: () async {
+                  final service = FlutterBackgroundService();
+                  bool isRunning = await service.isRunning();
+                  if (isRunning) {
+                    service.invoke("stopService");
+                  } else {
+                    service.startService();
+                  }
+
+                  if (!isRunning) {
+                    text = "停止服务";
+                  } else {
+                    text = "启动服务";
+                  }
+                  setState(() {});
+                },
+                child: Text(text))
+          ],
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('测试'),
+      ),
+      body: _buttons,
       bottomNavigationBar: Container(
         color: Colors.black,
         child: Padding(

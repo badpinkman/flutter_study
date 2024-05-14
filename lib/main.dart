@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_study/background/back_service.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'bottombar/google_nav_bar.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Permission.notification.isDenied.then((value) {
+    if (value) {
+      Permission.notification.request();
+    }
+  });
+  await initializeService();
   runApp(const MyApp());
 }
 
